@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne} from 'typeorm';
 
 @Entity()
 export class Role{
@@ -8,5 +8,5 @@ export class Role{
 
     @Column()
     name : string;
-
+    
 }

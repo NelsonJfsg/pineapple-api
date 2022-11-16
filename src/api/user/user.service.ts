@@ -12,16 +12,12 @@ import { User as userEntity} from 'src/database/entities/user';
 export class UserService {
 
     //Init
-    constructor(
-        @InjectRepository(userEntity)
-        private userEntity : Repository<userEntity>
-    ){
+    constructor(@InjectRepository(userEntity) private userEntity : Repository<userEntity>){}
 
-    }
+    createUser(user : User){
+        
+        return this.userEntity.insert(user);
 
-    async createUser(user : User){
-        console.log("user to db: " + user.email);
-        return await this.userEntity.insert(user);
     }
 
     sendThisName(name : string){
@@ -30,12 +26,49 @@ export class UserService {
     }
 
     getAllUsers(){
-        console.log("This shit");
         console.log(this.userEntity.find().then(response => {
             console.log(response); // Logs the response
              return response;
         }));
     }
 
+    //Check if the email recived is in db.
+    userExists(user : User) : boolean { 
+
+        //Var
+        let emailToCheck = user.email;
+        let userExist : boolean;
+
+        console.log("Email: " + emailToCheck);
+
+        //Query
+        var query = this.userEntity.find({
+
+            select : {
+                email : true,
+            },
+            where : {
+                email : emailToCheck, 
+            }
+
+        });
+
+        //Execute and validate
+        query
+        .then((res) => {
+            if(res.length != 0){
+                console.log("Existen registros");
+                
+                return userExist;
+            }else{
+
+                console.log("No existen registros")
+                
+                this.createUser(user);
+                return userExist;
+            }
+        });
+        return userExist;
+    }
 
  }

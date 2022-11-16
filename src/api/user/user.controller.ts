@@ -1,11 +1,11 @@
 //React
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Redirect, Res } from '@nestjs/common';
 
 //My imports
 import { User } from 'src/database/entities/user';
 import { UserService } from "./user.service";
 
-@Controller('/api/create-user')
+@Controller('/api/auth')
 export class UserController {
 
     //Init
@@ -13,25 +13,36 @@ export class UserController {
 
     }
 
-    @Post()
-    createUser(@Body() user : User){
-        console.log("Body: " + JSON.stringify(user));
-        this.userService.createUser(user);
-    }
-
+    //Login
     @Post('/name')
     sendName(@Body() name : string){
         console.log("Body: " + JSON.stringify(name));
         this.userService.sendThisName("name");
     }
-
-    @Get('/get-all-users')
-    getUsers(){
-        this.userService.getAllUsers();
+    
+    @Post('/verify-credential')
+    //@Redirect('http://localhost:5173/login', 302)
+    getUsers(@Body() user : User){
+        //return this.userService.userExists(user);
     }
+    //
+    
+    //Sign Up
+    @Post('/create-user')
+    createUser(@Body() user : User){
+        console.log("Body: " + JSON.stringify(user));
+        return this.userService.createUser(user);
+    }
+    
+    @Post('/v')
+    checkIfUserExist(@Body() user : User){
+        
+        console.log("CONTROLLER - CHECKIFUSEREXISTS");
+        this.userService.userExists(user);
 
-
-
-
+    }
+    
+    
+    //
 
 }
