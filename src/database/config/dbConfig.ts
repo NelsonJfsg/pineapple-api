@@ -2,9 +2,9 @@
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 //My imports
-import { User } from "src/database/entities/user";
+import { UserEntity } from "src/database/entities/user";
 import { Pinata } from "../entities/pinata";
-import { Role } from "../entities/role";
+import { RoleEntity } from "../entities/role";
 
 export const Connection = TypeOrmModule.forRoot({
 
@@ -14,7 +14,7 @@ export const Connection = TypeOrmModule.forRoot({
     username : "root",
     password : "",
     database : "pineappledb",
-    entities : [User, Role, Pinata],
+    entities : [UserEntity, RoleEntity, Pinata],
     synchronize : true,
 
 

@@ -5,20 +5,73 @@ import { Repository } from 'typeorm';
 
 
 //My imports
-import { User } from 'src/database/entities/user';
-import { User as userEntity} from 'src/database/entities/user';
+import { UserEntity } from 'src/database/entities/user';
+import { UserEntity as userEntity} from 'src/database/entities/user';
+import { UserModel } from 'src/models/userModel';
+import { response } from 'express';
+import { exit } from 'process';
 
 @Injectable()
 export class UserService {
 
     //Init
-    constructor(@InjectRepository(userEntity) private userEntity : Repository<userEntity>){}
-
-    createUser(user : User){
-        
-        return this.userEntity.insert(user);
+    constructor(@InjectRepository(userEntity) private userEntity : Repository<UserModel>){
 
     }
+
+    //This method can create an user with an object of type userModel
+    async createUser(user : UserModel){
+        
+        if(await this.userExists(user.email)){
+            console.log("Usuario existe");
+        }else{
+            console.log("Usuario no existe");
+            return this.userEntity.insert(user);
+        }
+
+
+
+    }
+
+    
+    //Check if the email recived is in db.
+    async userExists(clientEmail : string) : Promise<boolean> { 
+        
+        let operation = await this.userEntity.find({
+            select : ["name"],
+            where : {email : clientEmail}
+        })
+
+        if(operation.length != 0){
+            return true;
+        }
+        
+    }
+
+    async validateCrendentials(clientEmail : string, clientPasssord : string) : Promise<Boolean>{
+        
+        return await this.userEntity.find({
+            select : ['email', 'password'],
+            where : {email : clientEmail}
+        })
+        .then(response => {
+            
+            console.log(response);
+
+            const [user] = response;
+
+            if(user.email == clientEmail && user.password == clientPasssord){
+                return true;
+            }else{
+                return false;
+            }
+        }).catch(err => {console.log("err"); return false});
+
+
+    }
+
+
+
 
     sendThisName(name : string){
         console.log("this name: " + JSON.stringify(name));
@@ -32,43 +85,5 @@ export class UserService {
         }));
     }
 
-    //Check if the email recived is in db.
-    userExists(user : User) : boolean { 
-
-        //Var
-        let emailToCheck = user.email;
-        let userExist : boolean;
-
-        console.log("Email: " + emailToCheck);
-
-        //Query
-        var query = this.userEntity.find({
-
-            select : {
-                email : true,
-            },
-            where : {
-                email : emailToCheck, 
-            }
-
-        });
-
-        //Execute and validate
-        query
-        .then((res) => {
-            if(res.length != 0){
-                console.log("Existen registros");
-                
-                return userExist;
-            }else{
-
-                console.log("No existen registros")
-                
-                this.createUser(user);
-                return userExist;
-            }
-        });
-        return userExist;
-    }
 
  }

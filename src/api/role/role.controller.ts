@@ -1,17 +1,22 @@
 //TypeOrm
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
+import { RoleModel } from 'src/models/roleModel';
 
 //Entities
 
 //Service
 import { RoleService } from "./role.service";
 
-@Controller()
+@Controller('/api/auth')
 export class RoleController {
 
-    @Post()
-    createRoles(){
-        
+    constructor(private roleService : RoleService){
+
+    }
+
+    @Post('/create-role')
+    createRole(@Body() role : RoleModel){
+        return this.roleService.createRole(role);
     }
     
 }

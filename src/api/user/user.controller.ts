@@ -2,7 +2,8 @@
 import { Controller, Post, Body, Get, Redirect, Res } from '@nestjs/common';
 
 //My imports
-import { User } from 'src/database/entities/user';
+import { UserEntity } from 'src/database/entities/user';
+import { UserModel } from 'src/models/userModel';
 import { UserService } from "./user.service";
 
 @Controller('/api/auth')
@@ -12,33 +13,37 @@ export class UserController {
     constructor(private userService : UserService){
 
     }
+    
+    //Sign Up
+    @Post('/create-user')
+    createUser(@Body() user : UserModel){
+        return this.userService.createUser(user);
+    }
 
-    //Login
-    @Post('/name')
-    sendName(@Body() name : string){
-        console.log("Body: " + JSON.stringify(name));
-        this.userService.sendThisName("name");
+    @Post('/user-exists')
+    checkIfUserExists(@Body() clientEmail : UserModel){
+
+        const {email} = clientEmail;
+        
+        return this.userService.userExists(email);
     }
     
+    @Post('/validate-user')
+    validateCredentials(@Body() user : UserModel){
+        return this.userService.validateCrendentials(user.email, user.password);
+    }
+
     @Post('/verify-credential')
     //@Redirect('http://localhost:5173/login', 302)
-    getUsers(@Body() user : User){
+    getUsers(@Body() user : UserEntity){
         //return this.userService.userExists(user);
     }
     //
     
-    //Sign Up
-    @Post('/create-user')
-    createUser(@Body() user : User){
-        console.log("Body: " + JSON.stringify(user));
-        return this.userService.createUser(user);
-    }
-    
     @Post('/v')
-    checkIfUserExist(@Body() user : User){
+    checkIfUserExist(@Body() user : UserEntity){
         
-        console.log("CONTROLLER - CHECKIFUSEREXISTS");
-        this.userService.userExists(user);
+      
 
     }
     

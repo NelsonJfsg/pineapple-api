@@ -1,4 +1,4 @@
-export interface Role{
+export interface RoleModel{
 
     //Atributes
     id : number; //Primary key
