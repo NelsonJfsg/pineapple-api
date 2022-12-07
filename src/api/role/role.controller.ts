@@ -7,7 +7,7 @@ import { RoleModel } from 'src/models/roleModel';
 //Service
 import { RoleService } from "./role.service";
 
-@Controller('/api/auth')
+@Controller('/api/role')
 export class RoleController {
 
     constructor(private roleService : RoleService){

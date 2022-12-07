@@ -17,6 +17,13 @@ export class PinataService {
         return this.pinataEntity.insert(pinata);
     }
 
+    async deletePinata(id : number){
+        return await this.pinataEntity.delete(id).then(response => console.log(response));
+    }
+
+    async getAllPinatas(){
+        return await this.pinataEntity.find();
+    }
 
 
  }

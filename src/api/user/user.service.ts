@@ -11,6 +11,7 @@ import { UserModel } from 'src/models/userModel';
 import { response } from 'express';
 import { exit } from 'process';
 
+
 @Injectable()
 export class UserService {
 
@@ -23,10 +24,10 @@ export class UserService {
     async createUser(user : UserModel){
         
         if(await this.userExists(user.email)){
-            console.log("Usuario existe");
+            return "usuario existe, imposible crear usuario";
         }else{
             console.log("Usuario no existe");
-            return this.userEntity.insert(user);
+            return await this.userEntity.insert(user);
         }
 
 
@@ -61,11 +62,13 @@ export class UserService {
             const [user] = response;
 
             if(user.email == clientEmail && user.password == clientPasssord){
+                console.log("True");
                 return true;
             }else{
+                console.log("false");
                 return false;
             }
-        }).catch(err => {console.log("err"); return false});
+        }).catch(err => {console.log("err: " + err); return false});
 
 
     }
@@ -85,5 +88,12 @@ export class UserService {
         }));
     }
 
+    deleteUser(){
+
+    }
+
+    encryptPassword(password : string){
+       
+    }
 
  }

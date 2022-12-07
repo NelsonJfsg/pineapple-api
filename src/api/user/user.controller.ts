@@ -4,9 +4,10 @@ import { Controller, Post, Body, Get, Redirect, Res } from '@nestjs/common';
 //My imports
 import { UserEntity } from 'src/database/entities/user';
 import { UserModel } from 'src/models/userModel';
+import { BeforeInsert } from 'typeorm';
 import { UserService } from "./user.service";
 
-@Controller('/api/auth')
+@Controller('/api/auth/user')
 export class UserController {
 
     //Init
@@ -17,6 +18,7 @@ export class UserController {
     //Sign Up
     @Post('/create-user')
     createUser(@Body() user : UserModel){
+        
         return this.userService.createUser(user);
     }
 
