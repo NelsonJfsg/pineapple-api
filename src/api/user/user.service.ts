@@ -22,12 +22,17 @@ export class UserService {
 
     //This method can create an user with an object of type userModel
     async createUser(user : UserModel){
-        
+       
+        const {email} = user;
+        console.log(email);
+
+
         if(await this.userExists(user.email)){
-            return "usuario existe, imposible crear usuario";
+            return "usuario existe, imposible crear usuario.";
         }else{
             console.log("Usuario no existe");
-            return await this.userEntity.insert(user);
+            await this.userEntity.insert(user)
+            return "Usuario registrado correctamente.";
         }
 
 
@@ -96,4 +101,15 @@ export class UserService {
        
     }
 
+    getUserByEmail(thisEmail : string){
+
+        console.log(thisEmail["email"]);
+        return this.userEntity.find({
+            select : ['name', 'email'],
+            where : {email : thisEmail["email"]}
+        });
+    }
+
+
  }
+

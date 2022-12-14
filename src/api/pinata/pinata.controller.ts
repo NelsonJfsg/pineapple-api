@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { Pinata } from 'src/database/entities/Pinata';
+import { Pinata } from 'src/models/Pinata';
 import { PinataService } from './pinata.service';
 
 @Controller('/product/pinata')
@@ -10,9 +10,9 @@ export class PinataController {
     }
 
 
-    @Post('/create')
+    @Post('/create-pinata')
     createPinata(@Body() pinata : Pinata){
-        this.pinataService.createPinata(pinata);
+        return this.pinataService.createPinata(pinata);
     }
 
     @Delete('/delete/:id')

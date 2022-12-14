@@ -3,6 +3,7 @@ import { Controller, Post, Body, Get, Redirect, Res } from '@nestjs/common';
 
 //My imports
 import { UserEntity } from 'src/database/entities/user';
+import { UserCredentialModel } from 'src/models/userCredentialModel';
 import { UserModel } from 'src/models/userModel';
 import { BeforeInsert } from 'typeorm';
 import { UserService } from "./user.service";
@@ -18,7 +19,6 @@ export class UserController {
     //Sign Up
     @Post('/create-user')
     createUser(@Body() user : UserModel){
-        
         return this.userService.createUser(user);
     }
 
@@ -31,7 +31,7 @@ export class UserController {
     }
     
     @Post('/validate-user')
-    validateCredentials(@Body() user : UserModel){
+    validateCredentials(@Body() user : UserCredentialModel){
         return this.userService.validateCrendentials(user.email, user.password);
     }
 
@@ -49,6 +49,10 @@ export class UserController {
 
     }
     
+    @Post('/get-user-by-email')
+    getUserInformation(@Body() email : string){
+        return this.userService.getUserByEmail(email);
+    }
     
     //
 

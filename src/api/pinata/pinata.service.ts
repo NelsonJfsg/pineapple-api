@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Pinata } from 'src/database/entities/pinata';
+import { Pinata } from 'src/models/Pinata';
 import { Pinata as pinataEntity } from 'src/database/entities/pinata';
 
 @Injectable()

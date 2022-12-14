@@ -14,7 +14,7 @@ export class RoleService {
     }
 
     async createRole(role : RoleModel){
-        this.roleEntity.insert(role);
+        return this.roleEntity.insert(role);
     }
 
 }
